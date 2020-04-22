@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product
+from .models import Product, Orders
 from math import ceil
 from django.http import HttpResponse
 # Create your views here.
@@ -26,6 +26,9 @@ def about(request):
     return render(request, 'shop/about.html')
 
 def contact(request):
+    if request.method == "POST":
+        name = request.POST.get('name', '')
+        print(name)
     return render(request, 'shop/contact.html')   
 
 def tracker(request):
@@ -35,7 +38,17 @@ def search(request):
     return render(request, 'shop/search.html')        
 
 def checkout(request):
+    if request.method == "POST":
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        zipCode = request.POST.get('zip','')
+        state = request.POST.get('state','')
+        city = request.POST.get('city','')
+        Order = Orders(name=name, email=email, zipCode = zipCode, state=state, city=city)
+        Order.save()
     return render(request, 'shop/checkout.html') 
 
-def productview(request):
-    return render(request, 'shop/productview.html')
+def products(request, myid):
+    product = Product.objects.filter(id=myid)
+    # print(product)
+    return render(request, 'shop/productview.html', {'product':product[0]})

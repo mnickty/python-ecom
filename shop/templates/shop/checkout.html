@@ -1,0 +1,93 @@
+{% extends 'shop/basic.html' %}
+
+{% block title%} Title of Checkout Page {% endblock %}
+
+{% block body %} 
+
+    <div class="container my-4">
+        <div class="col">
+        <h2>Step 1 - My Awesome Cart Express Checkout - Review items</h2>
+        <div id="items">
+            <ul class="list-group">
+            </ul>
+            </div> 
+        </div>
+
+        <div class="col">
+            <h2>Step 2 - Enter Address and other details</h2>
+
+            <form method="POST" action="/shop/checkout/">
+                
+                <div class="form-row">
+                    {%csrf_token%}
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" class="name" id="name" name="name" placeholder="Your Full Name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Name</label>
+                    <input type="email" class="name" id="email" name="email" placeholder="Your Email">
+                  </div>
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" class="address" id="address" name="address" placeholder="Apartment, studio, or floor">
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="inputCity">City</label>
+                    <input type="text" class="form-control" name="city" id="inputCity">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="state">State</label>
+                    <input type="text" class="state" name="state" id="inputState">
+                  </div>
+                  <div class="form-group col-md-2">
+                    <label for="inputZip">Zip</label>
+                    <input type="text" class="form-control" name="zip" id="inputZip">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck">
+                    <label class="form-check-label" for="gridCheck">
+                      Check me out
+                    </label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+              </form>
+        </div>
+    </div>
+{% endblock%}
+
+{% block js %} 
+
+<script>
+    if(localStorage.getItem('cart'==null)){
+        var cart = {}; 
+    } else 
+    {
+        cart = JSON.parse(localStorage.getItem('cart')); 
+    }
+    console.log(cart); 
+    var sum = 0; 
+    if ($.isEmptyObject(cart)){
+        mystr = `<p style="color:red">Your Cart is empty - Please add some products to buy</p>`
+        $('#items').append(mystr); 
+    } else 
+    {
+        for(item in cart )
+    {
+        let name = cart[item][1]; 
+        let qty = cart[item][0]; 
+        sum = sum +qty; 
+        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+            ${name}
+            <span class="badge badge-primary badge-pill">${qty}</span></li>`
+            $('#items').append(mystr); 
+    }
+    }
+    document.getElementById('cart').innerHTML = sum;
+</script>
+
+{% endblock%}
