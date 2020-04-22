@@ -21,3 +21,4 @@ class Orders(models.Model):
     address = models.CharField(max_length=150)
     state = models.CharField(max_length=50)
     zipCode = models.CharField(max_length=50)
+    city = models.CharField(max_length=50, default="")
